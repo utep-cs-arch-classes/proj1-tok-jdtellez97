@@ -3,13 +3,13 @@
 #include"tokenizer.h"
 
   int space_char(char c){
-  if((c =='\t' || c == ' ')&& c != 0 )
+  if((c =='\t' || c == ' ') || c == '\n' )
     return 1;
   else  return 0;
   }
   int non_space_char(char c){
-  if((c != '\t' || c !=' ') && c != 0 )
-   return 1;
+  if((c != '\t' || c !=' ') || c != '\n' )
+    return 1;
    else return 0;
    }
 
@@ -29,12 +29,17 @@
        return str;
     }
   int count_words(char *str){
-    int c = 0;
-    char *temp = str;
-  while(*temp){
-    temp = word_start(temp);
-    temp = word_end(temp);
-    c++;
+    int c = 0; /*counter*/
+    int in = 0; /* instate, 1 is yes, 0 is no */
+    while(*str){
+      if(space_char(*str))
+	in = 0;
+      else if(in == 0)
+	{
+	  in = 1;
+	  c++;
+	}
+      ++str;
     }
      return c;
   }
@@ -80,13 +85,15 @@
     return tokens;
 }   
 int main(){
-  char * c = "Derp";
-   // printf("\n");
+  char *c = "Derp derp derp";
+   printf("\n");
    // printf("The first char is \n  %c ",*word_start(c));
    // printf("\n");
-   // printf("terminator triggered.\n  %c ",*word_end(c));
+    printf("terminator triggered.\n  %c ",*word_end(c));
+    printf("\n");
+   // printf("words in total: %d \n ",count_words(c));
    // printf("\n");
-   // printf("words in total: %s \n ",tokenize(c));
+   // printf("copied word " %s \n" , copy_str( , ));
    // printf("\n");
   return 0;
 }
