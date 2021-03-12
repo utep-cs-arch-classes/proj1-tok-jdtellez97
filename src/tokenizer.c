@@ -16,40 +16,43 @@
   char *word_start(char *str){
     while(*str){
       if(space_char(*str))
-	 *str++;
+	str++;
       else if(non_space_char(*str))
 	return str;
     }
   }
   char *word_end(char *str){
-      while(*str++){
-	if(non_space_char(*str))
-	*str++;
-    }
-       return str;
-    }
+      while(*str){
+	if(space_char(*str))
+	  return str;
+	else if( non_space_char(*str))
+	 str++;
+      }
+      return 0 ;
+  }
   int count_words(char *str){
     int c = 0; /*counter*/
-    int in = 0; /* instate, 1 is yes, 0 is no */
+    int in = 0; /* instate, 1 is true, 0 is false */
     while(*str){
-      if(space_char(*str))
-	in = 0;
-      else if(in == 0)
-	{
-	  in = 1;
-	  c++;
-	}
-      ++str;
-    }
-     return c;
+      if(space_char(*str)){
+        in = 0;
+      }
+      else if(in == 0){
+	in = 1;
+	c++;
+      }
+      str++;
   }
-
+    return c;
+  }
   char *copy_str(char *inStr, short len){
-  int i;
-  char *c = malloc(sizeof(*inStr)+1);
-  for(i = 0; i < len-1; i++){
-    (*c++) = (*inStr++);
+  int i = 0;
+  char *c = (char*)malloc(sizeof(char)*(len+1)) ;
+  while(i < len ){
+    c[i] = inStr[i];
+    i++;  
   }
+  c[len] = '\0';
   return c;
 }
   void print_tokens(char ** tokens){
@@ -76,24 +79,25 @@
 
     while(c < words){
       temp = word_start(temp);
-      char *current = copy_str(temp, (word_end(temp) - word_start(temp)));
+      tokens[c] = copy_str(temp, (word_end(temp) - word_start(temp)));
       temp = word_end(temp);
-      *(tokens+c)  = current;
       c++;
     }
-    *(tokens+words) = '\0';
+    tokens[words] = '\0';
     return tokens;
 }   
 int main(){
-  char *c = "Derp derp derp";
+  char *c = "Soy Sauce";
    printf("\n");
-   // printf("The first char is \n  %c ",*word_start(c));
-   // printf("\n");
+    printf("The first char is \n  %c ",*word_start(c));
+    printf("\n");
     printf("terminator triggered.\n  %c ",*word_end(c));
     printf("\n");
-   // printf("words in total: %d \n ",count_words(c));
-   // printf("\n");
-   // printf("copied word " %s \n" , copy_str( , ));
-   // printf("\n");
+    printf("words in total: %d \n ",count_words(c));
+    printf("\n");
+    printf("copied word  %s \n" , copy_str(c,30));
+    printf("\n");
+    printf("tokens: %s, ", tokenize(c));
+    printf("\n");
   return 0;
 }
