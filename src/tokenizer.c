@@ -14,19 +14,19 @@
    }
 
   char *word_start(char *str){
-    while(*str){
-      if(space_char(*str))
+    while(*str){   /* while  theres something in str*/
+      if(space_char(*str))  //spaces in str?
 	str++;
-      else if(non_space_char(*str))
+      else if(non_space_char(*str)) //characters in str?
 	return str;
     }
   }
   char *word_end(char *str){
       while(*str){
 	if(space_char(*str))
-	  return str;
+	  return str;      //return if theres a space
 	else if( non_space_char(*str))
-	 str++;
+	  str++;    // move to  next character
       }
       return 0 ;
   }
@@ -47,18 +47,18 @@
   }
   char *copy_str(char *inStr, short len){
   int i = 0;
-  char *c = (char*)malloc(sizeof(char)*(len+1)) ;
+  char *c = (char*)malloc(sizeof(char)*(len+1)); // allocate the memory for c
   while(i < len ){
-    c[i] = inStr[i];
+    c[i] = inStr[i]; // iterate through inStr with i and assign it to c 
     i++;  
   }
-  c[len] = '\0';
+  c[len] = '\0'; // terminate c
   return c;
 }
   void print_tokens(char ** tokens){
   int i = 0;
-  while(*(tokens+i)){
-    printf("[%d]: %s ", i, *(tokens+i));
+  while(tokens[i]){
+    printf("[%d]: %s ", i, tokens[i]);
 	   i++;
      }
 }
@@ -70,24 +70,34 @@
   }
   free(tokens);
 }
+int get_length(char* str){
+  int i = 0;
+  char * temp  = str;
+  while(*temp){
+    i++;
+    *temp++;
+  }
+   return i;
+}
+    
  char **tokenize(char *str){
-   
     int c = 0;
     int words = count_words(str);
      char *temp = str;
     char **tokens = (char**) malloc(sizeof(char*)*(words+1));
 
     while(c < words){
-      temp = word_start(temp);
-      tokens[c] = copy_str(temp, (word_end(temp) - word_start(temp)));
-      temp = word_end(temp);
+      temp = word_start(temp);// get the first char of temp
+      tokens[c] = copy_str(temp,get_length(temp)); // store the copied  word to that position
+      temp = word_end(temp); // end of the word 
       c++;
     }
     tokens[words] = '\0';
     return tokens;
 }   
 int main(){
-  char *c = "Soy Sauce";
+  char *c = "I have a bag of hair.";
+  char ** tokens;
    printf("\n");
     printf("The first char is \n  %c ",*word_start(c));
     printf("\n");
@@ -95,9 +105,15 @@ int main(){
     printf("\n");
     printf("words in total: %d \n ",count_words(c));
     printf("\n");
-    printf("copied word  %s \n" , copy_str(c,30));
+    printf("copied String  %s \n" , copy_str(c, get_length(c)));
     printf("\n");
-    printf("tokens: %s, ", tokenize(c));
+    printf("length of String %d \n", get_length(c));
     printf("\n");
+    printf("tokens: %s\n ", *tokenize(c));
+    printf("printing tokens \n");
+    // print_tokens(tokens);
+    printf("\n");
+    printf("freeing tokens...\n ");
+    free_tokens(tokens);
   return 0;
 }
